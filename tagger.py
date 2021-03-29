@@ -38,9 +38,8 @@ def tag(training_list, test_file, output_file):
 
     # Training process
     for file_name in training_list:
-        last_word = "."  # init as period makes the first word as start
-        cur_word = ""
-        last_pos = cur_pos = None
+        cur_word = "."
+        cur_pos = None
 
         f = open(file_name)
         lines = f.readlines()
