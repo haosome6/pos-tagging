@@ -42,6 +42,7 @@ def test_sentence(sentence, init_table, transit_table, emit_table):
     """Given a sentence as a list, where each element is a word. Using three
     tables to test the POS of the sentence. Return a list of POSs.
     """
+    weight = 0.0000001  # Replace for missing probability
     curr_p = {}
     for i in range(len(sentence)):
         word = sentence[i].lower()
@@ -50,6 +51,10 @@ def test_sentence(sentence, init_table, transit_table, emit_table):
                 if pos in init_table and (word, pos) in emit_table:
                     curr_p[pos] = \
                         [init_table[pos] * emit_table[(word, pos)], [pos]]
+                elif pos in init_table:
+                    curr_p[pos] = [init_table[pos] * weight, [pos]]
+                elif (word, pos) in emit_table:
+                    curr_p[pos] = [emit_table[(word, pos)] * weight, [pos]]
         else:
             prev_p = curr_p
             curr_p = {}
@@ -61,8 +66,10 @@ def test_sentence(sentence, init_table, transit_table, emit_table):
                             and (word, pos) in emit_table:
                         prob = p[0] * transit_table[(last_pos, pos)] * \
                                emit_table[(word, pos)]
-                    else:
-                        prob = 0
+                    elif (last_pos, pos) in transit_table:
+                        prob = p[0] * transit_table[(last_pos, pos)] * weight
+                    elif (word, pos) in emit_table:
+                        prob = p[0] * emit_table[(word, pos)] * weight
                     if prob > max_prob:
                         max_prob = prob
                         max_path = p[1].copy()
