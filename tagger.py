@@ -4,7 +4,7 @@
 import os
 import sys
 
-all_pos = []
+all_pos = []  # all pos ever seen in training process
 
 
 def increment_table_count(key, table, increment_by=1):
@@ -38,8 +38,6 @@ def test_sentence(sentence, init_table, transit_table, emit_table):
                 if pos in init_table and (word, pos) in emit_table:
                     curr_p[pos] = \
                         [init_table[pos] * emit_table[(word, pos)], [pos]]
-                else:
-                    curr_p[pos] = [0, [pos]]
         else:
             prev_p = curr_p
             curr_p = {}
@@ -47,16 +45,18 @@ def test_sentence(sentence, init_table, transit_table, emit_table):
                 max_prob = 0
                 max_path = []
                 for last_pos, p in prev_p.items():
-                    if (last_pos, pos) in transit_table and (
-                    word, pos) in emit_table:
+                    if (last_pos, pos) in transit_table \
+                            and (word, pos) in emit_table:
                         prob = p[0] * transit_table[(last_pos, pos)] * \
                                emit_table[(word, pos)]
                     else:
                         prob = 0
                     if prob > max_prob:
                         max_prob = prob
-                        max_path = p[1]
-                curr_p[pos] = [max_prob, max_path.append(pos)]
+                        max_path = p[1].copy()
+                if max_prob != 0:
+                    max_path.append(pos)
+                    curr_p[pos] = [max_prob, max_path]
 
     max_prob = 0
     result_path = []
@@ -116,6 +116,7 @@ def tag(training_list, test_file, output_file):
     lines = f.readlines()
     sentence = []
     for line in lines:
+        line = line[:-1]
         sentence.append(line)
         if line in end_puncs:
             result = test_sentence(sentence, init_table, transit_table,
