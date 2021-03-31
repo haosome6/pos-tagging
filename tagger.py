@@ -26,6 +26,18 @@ def update_conditional_table(table, sum_over_idx):
         table[condition] = table[condition] / count[condition[sum_over_idx]]
 
 
+def normalize_state_table(state_table):
+    """This is a helper function for test_sentence(). It normalize the given
+    state probability table to avoid the probability goes zero after serval
+    computations.
+    """
+    sum = 0
+    for p in state_table.values():
+        sum += p[0]
+    for state in state_table:
+        state_table[state][0] = state_table[state][0] / sum
+
+
 def test_sentence(sentence, init_table, transit_table, emit_table):
     """Given a sentence as a list, where each element is a word. Using three
     tables to test the POS of the sentence. Return a list of POSs.
@@ -57,6 +69,7 @@ def test_sentence(sentence, init_table, transit_table, emit_table):
                 if max_prob != 0:
                     max_path.append(pos)
                     curr_p[pos] = [max_prob, max_path]
+        normalize_state_table(curr_p)
 
     max_prob = 0
     result_path = []
