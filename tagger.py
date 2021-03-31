@@ -42,10 +42,10 @@ def test_sentence(sentence, init_table, transit_table, emit_table):
     """Given a sentence as a list, where each element is a word. Using three
     tables to test the POS of the sentence. Return a list of POSs.
     """
+    curr_p = {}
     for i in range(len(sentence)):
         word = sentence[i].lower()
         if i == 0:
-            curr_p = {}
             for pos in all_pos:
                 if pos in init_table and (word, pos) in emit_table:
                     curr_p[pos] = \
@@ -136,6 +136,7 @@ def tag(training_list, test_file, output_file):
                                    emit_table)
             for i in range(len(sentence)):
                 output_f.writelines([sentence[i], " : ", result[i], "\n"])
+            sentence = []
     f.close()
     output_f.close()
 
