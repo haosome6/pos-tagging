@@ -31,11 +31,11 @@ def normalize_state_table(state_table):
     state probability table to avoid the probability goes zero after serval
     computations.
     """
-    sum = 0
+    total = 0
     for p in state_table.values():
-        sum += p[0]
+        total += p[0]
     for state in state_table:
-        state_table[state][0] = state_table[state][0] / sum
+        state_table[state][0] = state_table[state][0] / total
 
 
 def test_sentence(sentence, init_table, transit_table, emit_table):
