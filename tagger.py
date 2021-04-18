@@ -1,6 +1,3 @@
-# The tagger.py starter code for CSC384 A4.
-# Currently reads in the names of the training files, test file and output file,
-# and calls the tagger (which you need to implement)
 import os
 import sys
 
@@ -88,12 +85,8 @@ def test_sentence(sentence, init_table, transit_table, emit_table):
 
 
 def tag(training_list, test_file, output_file):
-    # Tag the words from the untagged input file and write them into the output file.
-    # Doesn't do much else beyond that yet.
     print("Tagging the file.")
-    #
-    # YOUR IMPLEMENTATION GOES HERE
-    #
+
     end_puncs = [".", "!", "?"]
     init_table = {}
     transit_table = {}
@@ -130,7 +123,7 @@ def tag(training_list, test_file, output_file):
     update_conditional_table(transit_table, 0)
     update_conditional_table(emit_table, 1)
 
-    # Testing process
+    # Testing process, and write to output file
     f = open(test_file)
     output_f = open(output_file, "w")
     lines = f.readlines()
@@ -149,10 +142,8 @@ def tag(training_list, test_file, output_file):
 
 
 if __name__ == '__main__':
-    # Run the tagger function.
     print("Starting the tagging process.")
 
-    # Tagger expects the input call: "python3 tagger.py -d <training files> -t <test file> -o <output file>"
     parameters = sys.argv
     training_list = parameters[
                     parameters.index("-d") + 1:parameters.index("-t")]
@@ -162,5 +153,4 @@ if __name__ == '__main__':
     # print("Test file: " + test_file)
     # print("Ouptut file: " + output_file)
 
-    # Start the training and tagging operation.
     tag(training_list, test_file, output_file)

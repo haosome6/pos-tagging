@@ -30,5 +30,5 @@ The output file's name also need to be provided, and the format will looks like 
 
 ## Usage
 ```bash
-python3 tagger.py -d <training1.txt> <training2.txt> -t <test.txt> -o <output.txt>
+python3 tagger.py -d <training files> -t <test file> -o <output file>
 ```
